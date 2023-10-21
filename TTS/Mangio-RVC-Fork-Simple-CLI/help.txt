@@ -1,0 +1,131 @@
+usage: infer-web.py [-h] [--port PORT] [--pycmd PYCMD] [--colab]
+                    [--noparallel] [--noautoopen] [--paperspace] [--is_cli]
+                    [--simple_cli {infer,pre-process,extract-feature,train,train-feature,extract-model,uvr,}]
+                    [--exp_name EXP_NAME] [--trainset_dir TRAINSET_DIR]
+                    [--sample_rate {32k,40k,48k}] [--n_workers N_WORKERS]
+                    [--gpu GPU] [--is_pitch_guidance IS_PITCH_GUIDANCE]
+                    [--f0_method F0_METHOD]
+                    [--crepe_hop_length CREPE_HOP_LENGTH]
+                    [--rvc_version {v1,v2}] [--speaker_id SPEAKER_ID]
+                    [--save_epoch_iter SAVE_EPOCH_ITER] [--epochs EPOCHS]
+                    [--batch_size BATCH_SIZE]
+                    [--latest_ckpt_only LATEST_CKPT_ONLY]
+                    [--cache_trainset CACHE_TRAINSET]
+                    [--save_small_model SAVE_SMALL_MODEL]
+                    [--model_file_name MODEL_FILE_NAME]
+                    [--source_audio_path SOURCE_AUDIO_PATH]
+                    [--output_file_name OUTPUT_FILE_NAME]
+                    [--feature_index_path FEATURE_INDEX_PATH]
+                    [--transposition TRANSPOSITION]
+                    [--infer_f0_method INFER_F0_METHOD]
+                    [--harvest_median_filter_radius HARVEST_MEDIAN_FILTER_RADIUS]
+                    [--post_sample_rate POST_SAMPLE_RATE]
+                    [--mix_volume_envelope MIX_VOLUME_ENVELOPE]
+                    [--feature_index_ratio FEATURE_INDEX_RATIO]
+                    [--voiceless_consonant_protection VOICELESS_CONSONANT_PROTECTION]
+                    [--model_path MODEL_PATH]
+                    [--model_save_name MODEL_SAVE_NAME]
+                    [--model_info MODEL_INFO] [--cmd_help] [--agg AGG]
+                    [--format FORMAT] [--uvr5_weight_name UVR5_WEIGHT_NAME]
+                    [--formant_shift] [--formant_quefrency FORMANT_QUEFRENCY]
+                    [--formant_timbre FORMANT_TIMBRE]
+                    {} ...
+
+positional arguments:
+  {}
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --port PORT           Listen port
+  --pycmd PYCMD         Python command
+  --colab               Launch in colab
+  --noparallel          Disable parallel processing
+  --noautoopen          Do not open in browser automatically
+  --paperspace          Note that this argument just shares a gradio link for
+                        the web UI. Thus can be used on other non-local CLI
+                        systems.
+  --is_cli              Use the CLI instead of setting up a gradio UI. This
+                        flag will launch an RVC text interface where you can
+                        execute functions from infer-web.py!
+  --simple_cli {infer,pre-process,extract-feature,train,train-feature,extract-model,uvr,}
+                        Use the simpler CLI instead of the cli interface.
+                        Choose from 1) pre-process 2) extract-feature 3) WIP.
+  --exp_name EXP_NAME   Experiment name
+  --trainset_dir TRAINSET_DIR
+                        Trainset directory
+  --sample_rate {32k,40k,48k}
+                        Sample rate: 40k (32k, 40k, 48k)
+  --n_workers N_WORKERS
+                        Number of cpu threads to work
+  --gpu GPU             GPU device index to use
+  --is_pitch_guidance IS_PITCH_GUIDANCE
+                        Use pitch guidance (1 for True 0 for False)
+  --f0_method F0_METHOD
+                        F0 extraction method
+  --crepe_hop_length CREPE_HOP_LENGTH
+                        Hop length for crepe
+  --rvc_version {v1,v2}
+                        RVC version
+  --speaker_id SPEAKER_ID
+                        Speaker id for multi-speaker model
+  --save_epoch_iter SAVE_EPOCH_ITER
+                        Save model every n iterations
+  --epochs EPOCHS       Number of epochs to train
+  --batch_size BATCH_SIZE
+                        Batch size for training
+  --latest_ckpt_only LATEST_CKPT_ONLY
+                        Save only the latest checkpoint
+  --cache_trainset CACHE_TRAINSET
+                        Whether to cache training set to vram
+  --save_small_model SAVE_SMALL_MODEL
+                        Save extracted small model every generation?
+  --model_file_name MODEL_FILE_NAME
+                        Model name with .pth in ./weights
+  --source_audio_path SOURCE_AUDIO_PATH
+                        Source audio path for inference
+  --output_file_name OUTPUT_FILE_NAME
+                        Output file name to be placed in './audio-outputs'
+  --feature_index_path FEATURE_INDEX_PATH
+                        Feature index file path
+  --transposition TRANSPOSITION
+                        Transpose (integer, number of semitones, raise by an
+                        octave: 12, lower by an octave: -12)
+  --infer_f0_method INFER_F0_METHOD
+                        F0 extraction method for inference
+  --harvest_median_filter_radius HARVEST_MEDIAN_FILTER_RADIUS
+                        Harvest median filter radius, default 3.
+  --post_sample_rate POST_SAMPLE_RATE
+                        Resample the output audio in post-processing to the
+                        final sample rate. Set to 0 for no resampling.
+  --mix_volume_envelope MIX_VOLUME_ENVELOPE
+                        Use the volume envelope of the input to replace or mix
+                        with the volume envelope of the output. The closer the
+                        ratio is to 1, the more the output envelope is used.
+  --feature_index_ratio FEATURE_INDEX_RATIO
+                        Feature index ratio for inference.
+  --voiceless_consonant_protection VOICELESS_CONSONANT_PROTECTION
+                        Protect voiceless consonants and breath sounds to
+                        prevent artifacts such as tearing in electronic music.
+                        Set to 0.5 to disable. Decrease the value to increase
+                        protection, but it may reduce indexing accuracy.
+  --model_path MODEL_PATH
+                        Model path for extract-model
+  --model_save_name MODEL_SAVE_NAME
+                        Model save name for extract-model
+  --model_info MODEL_INFO
+                        Model info for extract-model
+  --cmd_help            Print help for simple cli
+  --agg AGG             Aggregation for uvr5
+  --format FORMAT       Audio format
+  --uvr5_weight_name UVR5_WEIGHT_NAME
+                        UVR5 weight name
+  --formant_shift       Whether to formant shift the inference audio before
+                        conversion: False (if set to false, you can ignore
+                        setting the quefrency and timbre values for
+                        formanting)
+  --formant_quefrency FORMANT_QUEFRENCY
+                        Quefrency for formanting: 8.0 (no need to set if arg14
+                        is False/false)
+  --formant_timbre FORMANT_TIMBRE
+                        Timbre for formanting: 1.2 (no need to set if arg14 is
+                        False/false)

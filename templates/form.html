@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <title>影片生成</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <form method="post" action="/">
+        <div class="wrapper">
+            <div class="section" id="videoGeneration">
+                <h1>新聞影片生成</h1>
+            </div>
+
+            <div class="container">
+                <div class="section">
+                    <h1>設定</h1>
+                    <ul>
+                        <li>
+                            <label for="ImgCache">圖片暫存位置:</label>
+                            <input type="text" id="ImgCache" name="ImgCache" required placeholder=" 輸入儲存路徑...">
+                        </li>
+                        <li>
+                            <label for="VideoFolder">影片暫存位置:</label>
+                            <input type="text" id="VideoFolder" name="VideoFolder" required placeholder=" 輸入儲存路徑...">
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <h1>生成</h1>
+                    <ul>
+                        <li>
+                            <label for="title">標題:</label>
+                            <input type="text" id="title" name="title" required placeholder=" 輸入標題..."><br>
+                        </li>
+                        <li>
+                            <label for="content">內容:</label>
+                            <textarea id="content" name="content" rows="4" required
+                                placeholder=" 輸入內文..."></textarea><br>
+                        </li>
+                        <li>
+                            <label>角色選擇:</label><br>
+                            <div class="radio-group">
+                                <input type="radio" id="char1" name="char" value="Neurosama" required>
+                                <label for="char1">Neurosama</label>
+                            </div>
+                            <div class="radio-group">
+                                <input type="radio" id="char2" name="char" value="Tree Friend" required>
+                                <label for="char2">Tree Friend</label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <h1>影片播放</h1>
+                    <ul>
+                        <li>
+                            <label for="videoPath">影片路徑:</label>
+                            <input type="text" id="videoPath" name="videoPath" required placeholder=" 影片路徑">
+                        </li>
+                        <li>
+                            <button id="startButton" disabled><i class="fas fa-play"></i> 開始播放</button>
+                            <button id="stopButton" disabled><i class="fas fa-stop"></i> 停止播放</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <label for="submit" class="button-container">
+                <i class="fas fa-video"></i> 開始生成
+                <input type="submit" id="submit" style="display: none;">
+            </label>
+        </div>
+    </form>
+
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #fff;
+        }
+
+        .button-container {
+            display: inline-block;
+            background-color: #2d5a8c;
+            color: #fff;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 2000px;
+            height: 80%;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        .section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            text-align: center;
+            margin: 10px;
+            background-color: #aeb1b4;
+            border-radius: 10px;
+            border: 3px solid #0c0c0c;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #videoGeneration {
+            flex: 1;
+            width: 96%;
+            max-width: none;
+        }
+
+        h1 {
+            font-size: 30px;
+            color: #0d0d0d;
+        }
+
+        label {
+            font-size: 20px;
+            color: #0d0d0d;
+        }
+
+        input[type="text"] {
+            width: 90%;
+            height: 25px;
+            padding: initial;
+            border: initial;
+            border-radius: 3px;
+        }
+
+        textarea {
+            width: 80%;
+            height: 150px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+
+        .button-list {
+            margin-top: 10px;
+        }
+
+        #startButton {
+            background-color: #2d5a8c;
+            color: #fff;
+            padding: 12px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #stopButton {
+            background-color: #2d5a8c;
+            color: #fff;
+            padding: 12px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #submit {
+            background-color: #2d5a8c;
+            color: #fff;
+            padding: 12px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        i {
+            margin-right: 5px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        li.button-list {
+            margin-top: 10px;
+        }
+
+        .radio-group input[type="radio"] {
+            display: none;
+        }
+
+        .radio-group label::before {
+            content: "";
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            margin-right: 5px;
+            border: 2px solid #0a0b0b;
+            border-radius: 50%;
+            vertical-align: middle;
+            background-color: white;
+        }
+
+        .radio-group input[type="radio"]:checked + label::before {
+            background-color: #0a0a0a;
+        }
+    </style>
+</body>
+
+</html>
