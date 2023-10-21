@@ -77,7 +77,7 @@ def index():
 
         combineVideo(newsVideo_path=os.path.join(output_video_folder, 'final.mp4'),
                      characterVideo_path=character_video_path,
-                     save_path=os.path.join(output_video_folder, 'final.mp4'))
+                     save_path=os.path.join(output_video_folder, 'news.mp4'))
 
         return redirect(url_for('video'))
     return render_template('form.html')
@@ -86,7 +86,7 @@ def index():
 @app.route('/video')
 def video():
     # Provide the correct path to your video file
-    video_path = '/home/toooot/ETtoday/output_video/final.mp4'
+    video_path = '/home/toooot/ETtoday/output_video/news.mp4'
     return send_file(video_path, mimetype='video/mp4')
 
 if __name__ == '__main__':
