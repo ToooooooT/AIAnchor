@@ -16,17 +16,10 @@ def add_subtitles_clip(video_clip, sentences, repeat_duration):
                        stroke_width=10) \
                         .set_duration(repeat_duration[i]) \
                         .set_start(total_sec) \
-                        .set_position(('center', 'bottom')) \
-                        .fx(vfx.mask_color, color=(255, 255, 255), thr=0)
-
-        
-        
-        # add_background_color(subtitles, color="white", opacity=0.5)
-
+                        .set_position(('center', 'bottom'))
         subtitles.append(txt)
         total_sec += repeat_duration[i]
 
-    # 合并视频和字幕
     return CompositeVideoClip([video_clip, *subtitles])
 
 
@@ -65,30 +58,17 @@ def combineVideo(newsVideo_path, characterVideo_path, save_path, sentences, audi
     final_video.write_videofile(save_path, codec='libx264')
 
 def resegment_subtitle(subtitles, time):
-
-    # 創建新的列表來存儲分割後的subtitles和對應的time
     new_subtitles = []
     new_time = []
 
     for subtitle, t in zip(subtitles, time):
-        # 計算中文字串的長度，一個中文字佔一個字元
         subtitle_length = len(subtitle)
 
-        # 計算每個子串的長度
-        segment_length = 10  # 每個子串包含10個中文字
+        segment_length = 10
 
-        # 切割中文字串並相應地切割時間
         for i in range(0, subtitle_length, segment_length):
             new_subtitle_segment = subtitle[i:i + segment_length]
             new_time_segment = t * len(new_subtitle_segment) / subtitle_length
             new_subtitles.append(new_subtitle_segment)
             new_time.append(new_time_segment)
     return new_subtitles, new_time
-
-# combineVideo('/home/toooot/ETtoday/output_video/final.mp4', 
-#              '/home/toooot/ETtoday/output_video/Neurosama.mp4', 
-#              '/home/toooot/ETtoday/output_video/news.mp4',
-#              ['嗨fdsadf324', '哈囉he77l', 'sdaf超123'],
-#              '/home/toooot/ETtoday/TTS/Mangio-RVC-Fork-Simple-CLI/audio-outputs')
-# # lines = '嗨哈囉'
-# print([l.encode('UTF-8') for l in lines ])

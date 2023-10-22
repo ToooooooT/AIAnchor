@@ -39,6 +39,7 @@ def gen_image(text, model_path, output_path):
     os.system(f'python ./TextClassification/img_test.py --text {text} --ckpt {model_path} --save_path {output_path}') 
 
 def split_text(text):
+    # pattern = r'[，。]'
     pattern = r'[。]'
     segments = re.split(pattern, text)
     segments = [segment.strip() for segment in segments if segment.strip()]
