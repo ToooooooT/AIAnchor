@@ -57,3 +57,6 @@ weights/
 *.csv
 news_content/
 pretrained*/
+*.ttf
+*.txt
+download.ipynb

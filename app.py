@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, send_file, redirect, url_for
 from utils import mkvideo, Content2EmotionalVideo, combineVideo
 import os
+import re
 
 app = Flask(__name__)
 
@@ -37,11 +38,35 @@ def tts_rvc(text, model_path, input_path, index_path, output_path, tts_wav_file)
 def gen_image(text, model_path, output_path):
     os.system(f'python ./TextClassification/img_test.py --text {text} --ckpt {model_path} --save_path {output_path}') 
 
+def split_text(text):
+    pattern = r'[。]'
+    segments = re.split(pattern, text)
+    segments = [segment.strip() for segment in segments if segment.strip()]
+    return segments
+
+def delete_files(folder_path):
+    # Get a list of all files in the folder
+    files = os.listdir(folder_path)
+    # Iterate over the files and remove each one
+    for file in files:
+        file_path = os.path.join(folder_path, file)
+        try:
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+                print(f"Removed: {file_path}")
+        except Exception as e:
+            print(f"Error: {e}")
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
+        delete_files('/home/toooot/ETtoday/TextClassification/best_img')
+        delete_files('/home/toooot/ETtoday/TTS/Mangio-RVC-Fork-Simple-CLI/audio-outputs')
         title = request.form['title']
         content = request.form['content']
+        content = split_text(content)
+        if content[-1] == '':
+            content = content[:-1]
         output_img_folder = request.form['ImgCache']
         output_video_folder = request.form['VideoFolder']
         who = request.form['char']
@@ -52,12 +77,13 @@ def index():
             output_video_folder = './output_video/'
 
         tts_wav_file = "/home/toooot/ETtoday/TTS/Mangio-RVC-Fork-Simple-CLI/saudio/google_voice.wav"
-        sentences = [title] + [content]
+        sentences = [title] + content
         rvc_model_path = "Harris_best.pth"
         input_voice_path = "saudio/google_voice.wav"
         index_path = "logs/Harris_best/added_IVF3057_Flat_nprobe_1_Harris_v2.index"
         tc_model_path = "/home/toooot/ETtoday/TextClassification/weights/model_1e-05_64.pth"
         for i, text in enumerate(sentences):
+            print(text)
             output_voice_path = f"{i}.wav"
             output_img_path = os.path.join(output_img_folder, f"{i}.jpg")
             tts_rvc(text, rvc_model_path, input_voice_path, index_path, output_voice_path, tts_wav_file)
@@ -77,7 +103,9 @@ def index():
 
         combineVideo(newsVideo_path=os.path.join(output_video_folder, 'final.mp4'),
                      characterVideo_path=character_video_path,
-                     save_path=os.path.join(output_video_folder, 'news.mp4'))
+                     save_path=os.path.join(output_video_folder, 'news.mp4'),
+                     sentences=sentences,
+                     audio_folder='./TTS/Mangio-RVC-Fork-Simple-CLI/audio-outputs')
 
         return redirect(url_for('video'))
     return render_template('form.html')
@@ -90,4 +118,4 @@ def video():
     return send_file(video_path, mimetype='video/mp4')
 
 if __name__ == '__main__':
-    app.run(port=8787)
+    app.run(port=8888)
