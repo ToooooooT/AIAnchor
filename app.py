@@ -119,4 +119,4 @@ def video():
     return send_file(video_path, mimetype='video/mp4')
 
 if __name__ == '__main__':
-    app.run(port=8888)
+    app.run(port=7777)
